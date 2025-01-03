@@ -78,7 +78,7 @@ export default function Home() {
     const booking = { date, time, guests, name, contact };
     try {
       const res = await axios.post(
-        "http://localhost:3001/api/bookings",
+        "https://table-backend.vercel.app/api/bookings",
         booking
       );
       if(res.data.message){
