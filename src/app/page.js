@@ -85,6 +85,10 @@ export default function Home() {
         setAvailabilityMessage("slot is already booked")
         return
       }
+      if(res.data.past){
+        setAvailabilityMessage("Past date are not allowed")
+        return
+      }
       setBookingSummary(res.data);
       setErrorMessage("");
       setAvailabilityMessage(null);
