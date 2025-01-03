@@ -55,7 +55,7 @@ export default function Home() {
     if (date && time) {
       try {
         const res = await axios.get(
-          `http://localhost:3001/api/availability?date=${date}&time=${time}`
+          `https://table-backend.vercel.app/api/availability?date=${date}&time=${time}`
         );
         setAvailabilityMessage(
           res.data.slots.length > 0
@@ -82,7 +82,7 @@ export default function Home() {
     const booking = { date, time, guests, name, contact };
     try {
       const res = await axios.post(
-        "http://localhost:3001/api/bookings",
+        "https://table-backend.vercel.app/api/bookings",
         booking
       );
       setBookingSummary(res.data);
@@ -97,7 +97,7 @@ export default function Home() {
   const handleCancel = async () => {
     if (bookingSummary) {
       try {
-        await axios.delete("http://localhost:3001/api/bookings", {
+        await axios.delete("https://table-backend.vercel.app/api/bookings", {
           data: { date: bookingSummary.date, time: bookingSummary.time },
         });
         setBookingSummary(null);
