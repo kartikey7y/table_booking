@@ -39,7 +39,7 @@ export default function Home() {
       duration: 2000, // Animation duration in milliseconds
       delay: 500, // Delay before animation starts
     });
-  },[errorMessage]);
+  }, [errorMessage]);
 
   const validateForm = () => {
     if (!date) return "Please select a valid date.";
@@ -57,11 +57,7 @@ export default function Home() {
         const res = await axios.get(
           `https://table-backend.vercel.app/api/availability?date=${date}&time=${time}`
         );
-        setAvailabilityMessage(
-          res.data.slots.length > 0
-            ? "Slot is available!"
-            : "Slot is not available!"
-        );
+        setAvailabilityMessage(res.data.message || (res.data.slots.length > 0 ? 'Slot is available!' : 'Slot is already booked.'));
       } catch (err) {
         console.error(err);
         setAvailabilityMessage("Error checking availability.");
@@ -82,9 +78,13 @@ export default function Home() {
     const booking = { date, time, guests, name, contact };
     try {
       const res = await axios.post(
-        "https://table-backend.vercel.app/api/bookings",
+        "http://localhost:3001/api/bookings",
         booking
       );
+      if(res.data.message){
+        setAvailabilityMessage("slot is already booked")
+        return
+      }
       setBookingSummary(res.data);
       setErrorMessage("");
       setAvailabilityMessage(null);
@@ -101,6 +101,16 @@ export default function Home() {
           data: { date: bookingSummary.date, time: bookingSummary.time },
         });
         setBookingSummary(null);
+        setDate("")
+        setTime("")
+        setName("")
+        setContact("")
+        setGuests("")
+        setAvailabilityMessage("Booking is cancelled")
+        setTimeout(()=>{
+          setAvailabilityMessage("")
+        },5000)
+        
       } catch (err) {
         console.error(err);
       }
